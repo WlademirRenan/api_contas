@@ -36,8 +36,22 @@ RSpec.describe Conta, type: :model do
     @matriz.save
     expect(@matriz.conta_pai_id).to eq nil
   end
-  it 'deve cancelar contas filiais vinculadas quando cancelar matriz'
-  it 'deve bloquear contas filiais vinculadas quando bloquear matriz'
+  it 'deve cancelar contas filiais vinculadas quando cancelar matriz' do
+    expect(@filial.status).to eq nil
+    @filial.save
+    expect(@filial.status).to eq 'ativa'
+    @matriz_principal.cancelar
+    expect(@filial.reload.status).to eq 'cancelada'
+    expect(@matriz_principal.reload.status).to eq 'cancelada'
+  end
+  it 'deve bloquear contas filiais vinculadas quando bloquear matriz' do
+    expect(@filial.status).to eq nil
+    @filial.save
+    expect(@filial.status).to eq 'ativa'
+    @matriz_principal.bloquear
+    expect(@filial.reload.status).to eq 'bloqueada'
+    expect(@matriz_principal.reload.status).to eq 'bloqueada'
+  end
 
   it 'filial deve obrigar conta_pai_id' do
     @filial.conta_pai_id = nil
@@ -79,8 +93,22 @@ RSpec.describe Conta, type: :model do
   it 'requer conta de origem quando estorno'
   it 'requer conta de destino quando estorno'
 
-  it 'quando cancelar conta status deve ser cancelada'
-  it 'quando bloquear conta status deve ser bloqueada'
-  it 'quando ativar conta status deve ser ativa'
+  it 'quando cancelar conta status deve ser cancelada' do
+    expect(@matriz_principal.status).to eq 'ativa'
+    @matriz_principal.cancelar
+    expect(@matriz_principal.reload.status).to eq 'cancelada'
+  end
+  it 'quando bloquear conta status deve ser bloqueada' do
+    expect(@matriz_principal.status).to eq 'ativa'
+    @matriz_principal.bloquear
+    expect(@matriz_principal.reload.status).to eq 'bloqueada'
+  end
+  it 'quando ativar conta status deve ser ativa' do
+    expect(@matriz_principal.status).to eq 'ativa'
+    @matriz_principal.bloquear
+    expect(@matriz_principal.reload.status).to eq 'bloqueada'
+    @matriz_principal.ativar
+    expect(@matriz_principal.reload.status).to eq 'ativa'
+  end
 
 end
