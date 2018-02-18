@@ -5,6 +5,8 @@ class CreateConta < ActiveRecord::Migration[5.1]
       t.string :nome
       t.integer :pessoa_id
       t.float :saldo
+      t.string :class_name
+      t.string :status
 
       t.timestamps
     end

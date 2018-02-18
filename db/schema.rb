@@ -17,16 +17,18 @@ ActiveRecord::Schema.define(version: 20180217183808) do
     t.string "nome"
     t.integer "pessoa_id"
     t.float "saldo", limit: 24
+    t.string "class_name"
+    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "pessoas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "class_name"
-    t.string "cnpj"
+    t.integer "cnpj"
     t.string "razao_social"
     t.string "nome_fantasia"
-    t.string "cpf"
+    t.integer "cpf"
     t.string "nome_completo"
     t.date "data_nascimento"
     t.datetime "created_at", null: false
