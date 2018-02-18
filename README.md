@@ -22,3 +22,5 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+valores negativos em saldo
+entendi que contas filiais podem realizar transferencia entre si
