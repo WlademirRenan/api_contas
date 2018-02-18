@@ -1,11 +1,35 @@
 require 'rails_helper'
 
 RSpec.describe Conta, type: :model do
-  it 'matriz deve obrigar nome'
-  it 'matriz deve obrigar pessoa_id'
-  it 'matriz deve conter data criacao'
+  before(:each) do
+    @pessoa = Pessoa.create(class_name: 'Fisica', cpf: '01234567890', nome_completo: 'Fulano de Tal', data_nascimento: '01/01/2000')
+    @matriz_principal = Conta.create(class_name: 'Matriz', nome: 'Matriz Principal', data_criacao: '01/01/2000', pessoa_id: @pessoa.id)
+    @matriz = Conta.new(class_name: 'Matriz', nome: 'Matriz', data_criacao: '01/01/2000', pessoa_id: @pessoa.id)
+    @filial = Conta.new(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id)
+  end
+
+  it 'matriz deve obrigar nome' do
+    @matriz.nome = nil
+    expect(@matriz).to_not be_valid
+  end
+  it 'matriz deve obrigar no minimo 3 caracteres para o nome' do
+    @matriz.nome = '12         '
+    expect(@matriz).to_not be_valid
+  end
+  it 'matriz deve obrigar pessoa_id' do
+    @matriz.pessoa_id = nil
+    expect(@matriz).to_not be_valid
+  end
+  it 'matriz deve conter data criacao' do
+    @matriz.data_criacao = nil
+    expect(@matriz).to_not be_valid
+  end
   it 'matriz pode ter contas filhas'
-  it 'matriz deve conter conter conta_pai_id nula'
+  it 'matriz deve conter conter conta_pai_id nula' do
+    @matriz.conta_pai_id = 1
+    @matriz.save
+    expect(@matriz.conta_pai_id).to eq nil
+  end
   it 'deve cancelar contas filiais vinculadas quando cancelar matriz'
   it 'deve bloquear contas filiais vinculadas quando bloquear matriz'
 
