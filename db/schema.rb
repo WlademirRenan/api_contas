@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20180217183808) do
     t.float "saldo", limit: 24
     t.string "class_name"
     t.string "status"
+    t.date "data_criacao"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

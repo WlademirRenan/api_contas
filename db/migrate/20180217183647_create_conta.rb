@@ -7,6 +7,7 @@ class CreateConta < ActiveRecord::Migration[5.1]
       t.float :saldo
       t.string :class_name
       t.string :status
+      t.date :data_criacao
 
       t.timestamps
     end
