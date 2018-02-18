@@ -24,7 +24,13 @@ RSpec.describe Conta, type: :model do
     @matriz.data_criacao = nil
     expect(@matriz).to_not be_valid
   end
-  it 'matriz pode ter contas filhas'
+  it 'matriz principal deve ter 0 filiais' do
+    expect(@matriz_principal.filiais.size).to eq 0
+  end
+  it 'matriz pode ter contas filhas e deve ter 1 filial' do
+    @filial.save
+    expect(@matriz_principal.filiais.size).to eq 1
+  end
   it 'matriz deve conter conter conta_pai_id nula' do
     @matriz.conta_pai_id = 1
     @matriz.save
@@ -33,11 +39,29 @@ RSpec.describe Conta, type: :model do
   it 'deve cancelar contas filiais vinculadas quando cancelar matriz'
   it 'deve bloquear contas filiais vinculadas quando bloquear matriz'
 
-  it 'filial deve obrigar conta_pai_id'
-  it 'filial deve obrigar nome'
-  it 'filial deve obrigar pessoa_id'
-  it 'filial deve conter data criacao'
-  it 'filial pode ter contas filhas'
+  it 'filial deve obrigar conta_pai_id' do
+    @filial.conta_pai_id = nil
+    expect(@filial).to_not be_valid
+  end
+  it 'filial deve obrigar nome' do
+    @filial.nome = nil
+    expect(@filial).to_not be_valid
+  end
+  it 'filial deve obrigar pessoa_id' do
+    @filial.pessoa_id = nil
+    expect(@filial).to_not be_valid
+  end
+  it 'filial deve conter data criacao' do
+    @filial.data_criacao = nil
+    expect(@filial).to_not be_valid
+  end
+  it 'filial pode ter contas filhas' do
+    @filial2 = @filial.dup
+    @filial.save
+    @filial2.conta_pai_id = @filial.id
+    @filial2.save
+    expect(@filial.filiais.size).to eq 1
+  end
 
   it 'deve permitir transferencia entre contas filiais'
   it 'deve emitir erro caso transferencia entre conta filial e matriz'
@@ -58,5 +82,5 @@ RSpec.describe Conta, type: :model do
   it 'quando cancelar conta status deve ser cancelada'
   it 'quando bloquear conta status deve ser bloqueada'
   it 'quando ativar conta status deve ser ativa'
-  # ativa,bloqueada, cancelada
+
 end

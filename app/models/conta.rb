@@ -1,4 +1,6 @@
 class Conta < ApplicationRecord
+
+  has_many :filiais, class_name: 'Conta', foreign_key: 'conta_pai_id', dependent: :destroy
   before_validation :remover_espacos
   before_save :remover_conta_pai_matriz, if: :matriz?
   validates :nome, :data_criacao, :class_name, :pessoa_id, presence: true
@@ -21,4 +23,5 @@ class Conta < ApplicationRecord
   def remover_conta_pai_matriz
     self.conta_pai_id = nil
   end
+
 end
