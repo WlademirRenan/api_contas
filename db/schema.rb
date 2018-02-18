@@ -25,10 +25,10 @@ ActiveRecord::Schema.define(version: 20180217183808) do
 
   create_table "pessoas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "class_name"
-    t.integer "cnpj"
+    t.string "cnpj"
     t.string "razao_social"
     t.string "nome_fantasia"
-    t.integer "cpf"
+    t.string "cpf"
     t.string "nome_completo"
     t.date "data_nascimento"
     t.datetime "created_at", null: false

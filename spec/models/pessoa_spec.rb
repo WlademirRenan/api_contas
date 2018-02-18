@@ -60,4 +60,8 @@ RSpec.describe Pessoa, type: :model do
   it 'juridica deve ser valida' do
     expect(@juridica).to be_valid
   end
+  it 'obriga class_name' do
+    @fisica.class_name = nil
+    expect(@fisica).to_not be_valid
+  end
 end

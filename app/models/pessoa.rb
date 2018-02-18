@@ -17,8 +17,8 @@ class Pessoa < ApplicationRecord
   end
 
   def remover_espacos
-    cpf.to_s.gsub!(/[^0-9]/, '')#.squish!
-    cnpj.to_s.gsub!(/[^0-9]/, '')
+    cpf.try(:gsub!, /[^0-9]/, '')#.squish!
+    cnpj.try(:gsub!, /[^0-9]/, '')
     nome_completo.to_s.squish!
     razao_social.to_s.squish!
     nome_fantasia.to_s.squish!
