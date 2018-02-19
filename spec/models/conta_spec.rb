@@ -52,7 +52,6 @@ RSpec.describe Conta, type: :model do
     expect(@filial.reload.status).to eq 'bloqueada'
     expect(@matriz_principal.reload.status).to eq 'bloqueada'
   end
-
   it 'filial deve obrigar conta_pai_id' do
     @filial.conta_pai_id = nil
     expect(@filial).to_not be_valid
@@ -76,25 +75,6 @@ RSpec.describe Conta, type: :model do
     @filial2.save
     expect(@filial.filiais.size).to eq 1
   end
-
-  it 'deve permitir transferencia entre contas filiais'
-  it 'deve emitir erro caso transferencia entre conta filial e matriz'
-  it 'deve emitir erro caso transferencia entre conta matriz e filial'
-  it 'requer token quando aporte em conta matriz'
-  it 'requer conta de origem quando transferencia'
-  it 'requer conta de destino quando transferencia'
-  it 'requer token quando estorno em conta matriz'
-  it 'dever emitir erro quando tranferencia de conta origem cancelada'
-  it 'dever emitir erro quando tranferencia de conta destino cancelada'
-  it 'dever emitir erro quando tranferencia de conta origem bloqueada'
-  it 'dever emitir erro quando tranferencia de conta destino bloqueada'
-  it 'estorno deve remover valor com base no token'
-  it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
-  it 'estorno deve gravar id da operaçao estornada'
-  it 'estorno pode ser feito apenas uma vez por transacao'
-  it 'requer conta de origem quando estorno'
-  it 'requer conta de destino quando estorno'
-
   it 'quando cancelar conta status deve ser cancelada' do
     expect(@matriz_principal.status).to eq 'ativa'
     @matriz_principal.cancelar
