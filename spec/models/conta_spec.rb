@@ -90,6 +90,8 @@ RSpec.describe Conta, type: :model do
   it 'dever emitir erro quando tranferencia de conta destino bloqueada'
   it 'estorno deve remover valor com base no token'
   it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
+  it 'estorno deve gravar id da operaçao estornada'
+  it 'estorno pode ser feito apenas uma vez por transacao'
   it 'requer conta de origem quando estorno'
   it 'requer conta de destino quando estorno'
 

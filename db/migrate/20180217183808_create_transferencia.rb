@@ -6,6 +6,7 @@ class CreateTransferencia < ActiveRecord::Migration[5.1]
       t.integer :conta_origem_id
       t.integer :conta_destino_id
       t.string :token
+      t.integer :transacao_estornada_id
 
       t.timestamps
     end
