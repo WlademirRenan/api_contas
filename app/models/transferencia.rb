@@ -1,2 +1,3 @@
 class Transferencia < ApplicationRecord
+  
 end
