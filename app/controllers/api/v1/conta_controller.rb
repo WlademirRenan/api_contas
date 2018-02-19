@@ -1,18 +1,18 @@
 class Api::V1::ContaController < Api::V1::ApiController
   before_action :set_conta, only: [:show, :update, :destroy, :cancelar, :bloquear, :ativar]
 
-  # GET /api/v1/contas
+  # GET /api/v1/conta
   def index
     @contas = Conta.all
     render json: @contas
   end
 
-  # GET /api/v1/contas/1
+  # GET /api/v1/conta/1
   def show
     render json: @conta
   end
 
-  # POST /api/v1/contas
+  # POST /api/v1/conta
   def create
     @conta = Conta.new(conta_params)
     if @conta.save
@@ -22,7 +22,7 @@ class Api::V1::ContaController < Api::V1::ApiController
     end
   end
  
-  # PATCH/PUT /api/v1/contas/1
+  # PATCH/PUT /api/v1/conta/1
   def update
     if @conta.update(conta_params)
       render json: @conta
@@ -71,7 +71,7 @@ class Api::V1::ContaController < Api::V1::ApiController
  
   # Only allow a trusted parameter "white list" through.
   def conta_params
-    params.permit(:conta_pai_id, :nome, :pessoa_id, :data_criacao)
+    params.permit(:conta_pai_id, :nome, :pessoa_id, :data_criacao, :valor, :token)
   end
 
 end
