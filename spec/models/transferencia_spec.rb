@@ -14,20 +14,42 @@ RSpec.describe Transferencia, type: :model do
   it 'deve permitir transferencia entre contas filiais' do
     expect(@transferencia).to be_valid
   end
-  it 'deve emitir erro caso transferencia entre conta filial e matriz'
-  it 'deve permitir transferencia entre conta matriz e filial'
-  it 'requer token quando aporte em conta matriz'
-  it 'requer conta de origem quando transferencia'
-  it 'requer conta de destino quando transferencia'
-  it 'requer token quando estorno em conta matriz'
+  it 'deve emitir erro caso transferencia entre conta filial e matriz' do
+    @transferencia.conta_destino_id = @matriz_principal.id
+    @transferencia.conta_origem_id = @filial.id
+    @transferencia.token = 'asd123'
+    expect(@transferencia).to_not be_valid
+  end
+  it 'deve permitir transferencia entre conta matriz e filial' do
+    @transferencia.conta_origem_id = @matriz_principal.id
+    expect(@transferencia).to be_valid
+  end
+  it 'requer conta de origem quando transferencia' do
+    @transferencia.conta_destino_id = @filial.id
+    @transferencia.conta_origem_id = nil
+    expect(@transferencia).to_not be_valid
+  end
+  it 'requer conta de destino quando transferencia' do
+    @transferencia.conta_origem_id = @filial.id
+    @transferencia.conta_destino_id = nil
+    expect(@transferencia).to_not be_valid
+  end
   it 'dever emitir erro quando tranferencia de conta origem cancelada'
   it 'dever emitir erro quando tranferencia de conta destino cancelada'
   it 'dever emitir erro quando tranferencia de conta origem bloqueada'
   it 'dever emitir erro quando tranferencia de conta destino bloqueada'
-  it 'estorno deve remover valor com base no token'
   it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
   it 'estorno deve gravar id da operaçao estornada'
   it 'estorno pode ser feito apenas uma vez por transacao'
-  it 'requer conta de origem quando estorno'
-  it 'requer conta de destino quando estorno'
+  it 'requer tipo (entrada / saida)'
+    
+  #it 'requer token quando aporte em conta matriz' do
+  #  @transferencia.conta_destino_id = @matriz_principal.id
+  #  @transferencia.conta_origem_id = nil
+  #  @transferencia.token = 'asd123'
+  #  expect(@transferencia).to be_valid
+  #end
+  it 'requer token quando estorno em conta matriz'
+  it 'estorno deve remover valor com base no token'
+
 end
