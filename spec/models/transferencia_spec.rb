@@ -8,14 +8,14 @@ RSpec.describe Transferencia, type: :model do
     @filial = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id)
     @filial2 = Conta.create(class_name: 'Filial', nome: 'Filial2', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id)
     @filial_cancelada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'cancelada')
+    @transferencia = Transferencia.new(valor: 10.0, conta_origem_id: @filial2.id, conta_destino_id: @filial.id)
   end
 
   it 'deve permitir transferencia entre contas filiais' do
-    @matriz.nome = nil
-    expect(@matriz).to_not be_valid
+    expect(@transferencia).to be_valid
   end
   it 'deve emitir erro caso transferencia entre conta filial e matriz'
-  it 'deve emitir erro caso transferencia entre conta matriz e filial'
+  it 'deve permitir transferencia entre conta matriz e filial'
   it 'requer token quando aporte em conta matriz'
   it 'requer conta de origem quando transferencia'
   it 'requer conta de destino quando transferencia'
