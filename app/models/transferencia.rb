@@ -33,7 +33,7 @@ class Transferencia < ApplicationRecord
   end
 
   def transacao_permitida?
-    errors.add(:conta_destino_id, "Matriz apenas recebe aporte") if conta_destino_matriz?
+    errors.add(:conta_destino_id, 'Matriz apenas recebe aporte') if conta_destino_matriz?
     errors.add(:base, 'Não são permitidas operações entre contas canceladas ou bloqueadas') unless transacao_entre_contas_validas?
     errors.add(:tipo, 'invalido, permitido apenas true(entrada) ou false(saida)') unless tipo_valido?
   end

@@ -7,8 +7,19 @@ class Aporte < ApplicationRecord
   validate :transacao_permitida?
 
   def transacao_permitida?
-    errors.add(:conta_destino_id, "Filial apenas recebe transferencia") if conta_destino_filial?
+    errors.add(:conta_destino_id, 'Filial apenas recebe transferencia') if conta_destino_filial?
     errors.add(:base, 'Não são permitidas operações entre contas canceladas ou bloqueadas') unless transacao_entre_contas_validas?
-    errors.add(:tipo, 'invalido, permitido apenas true(entrada) ou false(saida)') unless tipo_valido?
+  end
+
+  def conta_destino_filial?
+    conta_destino.try(:filial?)
+  end
+
+  def transacao_entre_contas_validas?
+    conta_destino_ativa?
+  end
+
+  def conta_destino_ativa?
+    conta_destino.try(:ativa?)
   end
 end
