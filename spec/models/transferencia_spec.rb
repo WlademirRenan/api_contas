@@ -61,17 +61,9 @@ RSpec.describe Transferencia, type: :model do
     @transferencia.conta_destino_id = @filial_bloqueada.id
     expect(@transferencia).to_not be_valid
   end
+  it 'transferencia deve retirar 10 da origem e aumentar x do destino'
   it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
   it 'estorno deve gravar id da operaçao estornada'
   it 'estorno pode ser feito apenas uma vez por transacao'
-    
-  #it 'requer token quando aporte em conta matriz' do
-  #  @transferencia.conta_destino_id = @matriz_principal.id
-  #  @transferencia.conta_origem_id = nil
-  #  @transferencia.token = 'asd123'
-  #  expect(@transferencia).to be_valid
-  #end
-  it 'requer token quando estorno em conta matriz'
-  it 'estorno deve remover valor com base no token'
 
 end
