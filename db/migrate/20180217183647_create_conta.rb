@@ -4,7 +4,7 @@ class CreateConta < ActiveRecord::Migration[5.1]
       t.integer :conta_pai_id
       t.string :nome
       t.integer :pessoa_id
-      t.float :saldo
+      t.float :saldo, default: 0.0, null: false
       t.string :class_name
       t.string :status
       t.date :data_criacao

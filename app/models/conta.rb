@@ -62,4 +62,14 @@ class Conta < ApplicationRecord
     status.eql? 'ativa'
   end
 
+  def creditar(valor)
+    self.saldo += valor
+    self.save
+  end
+
+  def debitar(valor)
+    self.saldo -= valor
+    self.save
+  end
+
 end

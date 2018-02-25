@@ -41,27 +41,37 @@ RSpec.describe Transferencia, type: :model do
     @transferencia.tipo = false
     expect(@transferencia).to be_valid
   end
-  it 'dever emitir erro quando tranferencia de conta origem cancelada' do
+  it 'deve emitir erro quando tranferencia de conta origem cancelada' do
     @filial_cancelada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'cancelada')
     @transferencia.conta_origem_id = @filial_cancelada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'dever emitir erro quando tranferencia de conta destino cancelada' do
+  it 'deve emitir erro quando tranferencia de conta destino cancelada' do
     @filial_cancelada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'cancelada')
     @transferencia.conta_destino_id = @filial_cancelada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'dever emitir erro quando tranferencia de conta origem bloqueada' do
+  it 'deve emitir erro quando tranferencia de conta origem bloqueada' do
     @filial_bloqueada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'bloqueada')
     @transferencia.conta_origem_id = @filial_bloqueada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'dever emitir erro quando tranferencia de conta destino bloqueada' do
+  it 'deve emitir erro quando tranferencia de conta destino bloqueada' do
     @filial_bloqueada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'bloqueada')
     @transferencia.conta_destino_id = @filial_bloqueada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'transferencia deve retirar 10 da origem e aumentar x do destino'
+  it 'deve emitiir erro quando valor for negativo' do
+    @transferencia.valor = -1.3
+    expect(@transferencia).to_not be_valid
+  end
+  it 'transferencia deve retirar 10 da origem e aumentar 10 do destino' do
+    expect(@filial2.saldo).to eq 0.0
+    expect(@filial.saldo).to eq 0.0
+    @transferencia.save
+    expect(@filial2.reload.saldo).to eq -10.0
+    expect(@filial.reload.saldo).to eq 10.0
+  end
   it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
   it 'estorno deve gravar id da operaçao estornada'
   it 'estorno pode ser feito apenas uma vez por transacao'

@@ -8,6 +8,8 @@ class Transferencia < ApplicationRecord
   validates :conta_origem_id, presence: true, if: :conta_destino_filial?
   validate :transacao_permitida?
 
+  before_save :movimentar
+
   def conta_origem_ativa?
     conta_origem.try(:ativa?)
   end
@@ -36,6 +38,25 @@ class Transferencia < ApplicationRecord
     errors.add(:conta_destino_id, 'Matriz apenas recebe aporte') if conta_destino_matriz?
     errors.add(:base, 'Não são permitidas operações entre contas canceladas ou bloqueadas') unless transacao_entre_contas_validas?
     errors.add(:tipo, 'invalido, permitido apenas true(entrada) ou false(saida)') unless tipo_valido?
+    errors.add(:valor, 'não é permitido negativo') if valor.negative?
+  end
+
+  def movimentar
+    if tipo.eql? true
+      transferir(valor)
+    else
+      estornar(valor)
+    end
+  end
+
+  def transferir(valor)
+    conta_origem.debitar(valor)
+    conta_destino.creditar(valor)
+  end
+
+  def estornar(valor)
+    conta_destino.debitar(valor)
+    conta_origem.creditar(valor)
   end
 
 end

@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20180221182607) do
     t.integer "conta_pai_id"
     t.string "nome"
     t.integer "pessoa_id"
-    t.float "saldo", limit: 24
+    t.float "saldo", limit: 24, default: 0.0, null: false
     t.string "class_name"
     t.string "status"
     t.date "data_criacao"
@@ -52,7 +52,6 @@ ActiveRecord::Schema.define(version: 20180221182607) do
     t.integer "conta_origem_id"
     t.integer "conta_destino_id"
     t.string "token"
-    t.integer "transacao_estornada_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
