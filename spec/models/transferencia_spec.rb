@@ -37,26 +37,27 @@ RSpec.describe Transferencia, type: :model do
     expect(@transferencia).to_not be_valid
   end
   it 'requer tipo (true - entrada / false - saida)' do
+    @transferencia.save
     @transferencia.tipo = false
-    @transferencia.transacao_estornada_id = 1
+    @transferencia.transacao_estornada_id = @transferencia.id
     expect(@transferencia).to be_valid
   end
-  it 'deve emitir erro quando tranferencia de conta origem cancelada' do
+  it 'deve emitir erro quando transferencia de conta origem cancelada' do
     @filial_cancelada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'cancelada')
     @transferencia.conta_origem_id = @filial_cancelada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'deve emitir erro quando tranferencia de conta destino cancelada' do
+  it 'deve emitir erro quando transferencia de conta destino cancelada' do
     @filial_cancelada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'cancelada')
     @transferencia.conta_destino_id = @filial_cancelada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'deve emitir erro quando tranferencia de conta origem bloqueada' do
+  it 'deve emitir erro quando transferencia de conta origem bloqueada' do
     @filial_bloqueada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'bloqueada')
     @transferencia.conta_origem_id = @filial_bloqueada.id
     expect(@transferencia).to_not be_valid
   end
-  it 'deve emitir erro quando tranferencia de conta destino bloqueada' do
+  it 'deve emitir erro quando transferencia de conta destino bloqueada' do
     @filial_bloqueada = Conta.create(class_name: 'Filial', nome: 'Filial', data_criacao: '01/01/2000', conta_pai_id: @matriz_principal.id, pessoa_id: @pessoa.id, status: 'bloqueada')
     @transferencia.conta_destino_id = @filial_bloqueada.id
     expect(@transferencia).to_not be_valid
@@ -75,11 +76,31 @@ RSpec.describe Transferencia, type: :model do
   it 'estorno requer trasacao_estoranada_id' do
     @transferencia.save
     @estorno = Transferencia.new(tipo: false, valor: 10.0, conta_origem_id: @filial2.id, conta_destino_id: @filial.id)
-    #@estorno.transacao_estornada_id = @tranferencia.id
     expect(@estorno).to_not be_valid
   end
-  it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
-  it 'estorno deve gravar id da operaçao estornada'
-  it 'estorno pode ser feito apenas uma vez por transacao'
+  it 'valor estorno deve ser o mesmo da transacao original' do
+    @transferencia.save
+    @estorno = Transferencia.new(tipo: false, valor: 110.0, conta_origem_id: @filial2.id, conta_destino_id: @filial.id)
+    @estorno.transacao_estornada_id = @transferencia.id
+    expect(@estorno).to_not be_valid
+  end
+  it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem' do
+    @transferencia.save
+    expect(@filial.reload.saldo).to eq 10.0
+    expect(@filial2.reload.saldo).to eq -10.0
+    @estorno = Transferencia.new(tipo: false, valor: 10.0, conta_origem_id: @filial2.id, conta_destino_id: @filial.id)
+    @estorno.transacao_estornada_id = @transferencia.id
+    @estorno.save
+    expect(@filial.reload.saldo).to eq 0.0
+    expect(@filial2.reload.saldo).to eq 0.0
+  end
+  it 'estorno pode ser feito apenas uma vez por transacao' do
+    @transferencia.save
+    @estorno = Transferencia.new(tipo: false, valor: 10.0, conta_origem_id: @filial2.id, conta_destino_id: @filial.id, transacao_estornada_id: @transferencia.id)
+    @estorno2 = @estorno.dup
+
+    @estorno.save
+    expect(@estorno2).to_not be_valid
+  end
 
 end
