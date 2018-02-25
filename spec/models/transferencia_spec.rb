@@ -13,6 +13,9 @@ RSpec.describe Transferencia, type: :model do
   it 'deve permitir transferencia entre contas filiais' do
     expect(@transferencia).to be_valid
   end
+  it 'deve retornar conta destino como filial' do
+    expect(@transferencia.conta_destino_filial?).to eq true
+  end
   it 'deve emitir erro caso transferencia entre conta filial e matriz' do
     @transferencia.conta_destino_id = @matriz_principal.id
     @transferencia.conta_origem_id = @filial.id
