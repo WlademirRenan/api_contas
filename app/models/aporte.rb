@@ -6,6 +6,8 @@ class Aporte < ApplicationRecord
 
   validate :transacao_permitida?
 
+  before_save :movimentar
+
   def transacao_permitida?
     errors.add(:conta_destino_id, 'Filial apenas recebe transferencia') if conta_destino_filial?
     errors.add(:base, 'Não são permitidas operações entre contas canceladas ou bloqueadas') unless transacao_entre_contas_validas?
@@ -21,5 +23,21 @@ class Aporte < ApplicationRecord
 
   def conta_destino_ativa?
     conta_destino.try(:ativa?)
+  end
+
+  def movimentar
+    if tipo.eql? true
+      transferir(valor)
+    else
+      estornar(valor)
+    end
+  end
+
+  def transferir(valor)
+    conta_destino.creditar(valor)
+  end
+
+  def estornar(valor)
+    conta_destino.debitar(valor)
   end
 end
