@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20180221182607) do
     t.boolean "tipo"
     t.integer "conta_origem_id"
     t.integer "conta_destino_id"
-    t.string "token"
+    t.integer "transacao_estornada_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

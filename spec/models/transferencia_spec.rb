@@ -16,7 +16,6 @@ RSpec.describe Transferencia, type: :model do
   it 'deve emitir erro caso transferencia entre conta filial e matriz' do
     @transferencia.conta_destino_id = @matriz_principal.id
     @transferencia.conta_origem_id = @filial.id
-    @transferencia.token = 'asd123'
     expect(@transferencia).to_not be_valid
   end
   it 'deve permitir transferencia entre conta matriz e filial' do
@@ -39,6 +38,7 @@ RSpec.describe Transferencia, type: :model do
   end
   it 'requer tipo (true - entrada / false - saida)' do
     @transferencia.tipo = false
+    @transferencia.transacao_estornada_id = 1
     expect(@transferencia).to be_valid
   end
   it 'deve emitir erro quando tranferencia de conta origem cancelada' do
@@ -71,6 +71,12 @@ RSpec.describe Transferencia, type: :model do
     @transferencia.save
     expect(@filial2.reload.saldo).to eq -10.0
     expect(@filial.reload.saldo).to eq 10.0
+  end
+  it 'estorno requer trasacao_estoranada_id' do
+    @transferencia.save
+    @estorno = Transferencia.new(tipo: false, valor: 10.0, conta_origem_id: @filial2.id, conta_destino_id: @filial.id)
+    #@estorno.transacao_estornada_id = @tranferencia.id
+    expect(@estorno).to_not be_valid
   end
   it 'estorno de contas filiais deve retirar x do destino e aumentar x da origem'
   it 'estorno deve gravar id da operaçao estornada'
