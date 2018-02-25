@@ -28,7 +28,15 @@ RSpec.describe Aporte, type: :model do
     @matriz.bloquear
     expect(@aporte).to_not be_valid
   end
-  it 'estorno de conta matriz deve retirar x do destino'
-  it 'requer token quando estorno em conta matriz'
-  it 'estorno deve remover valor com base no token'
+  it 'estorno de conta matriz deve retirar x do destino' do
+    @aporte.save
+    expect(@matriz.reload.saldo).to eq 10.0
+    @estorno = Aporte.new(valor: 10.0, conta_destino_id: @matriz.id, tipo: false, token: 'asd1321', token_estornado: 'asd132')
+    @estorno.save
+    expect(@matriz.reload.saldo).to eq 0.0
+  end
+  it 'requer token_estornado_id quando estorno em conta matriz' do
+    @estorno = Aporte.new(valor: 10.0, conta_destino_id: @matriz.id, tipo: false, token: 'asd1321', token_estornado: 'asd132')
+    expect(@estorno).to_not be_valid
+  end
 end

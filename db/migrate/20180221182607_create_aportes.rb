@@ -5,7 +5,7 @@ class CreateAportes < ActiveRecord::Migration[5.1]
       t.string  :token
       t.float   :valor
       t.boolean :tipo
-      t.integer :transacao_estornada_id
+      t.string :token_estornado
 
       t.timestamps
     end

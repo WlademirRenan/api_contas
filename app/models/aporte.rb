@@ -4,6 +4,7 @@ class Aporte < ApplicationRecord
   validates :conta_destino_id, :valor, :token, presence: true
   validates :tipo, inclusion: { in: [true, false] }
   validates :token, uniqueness: true
+  validates :token_estornado, presence: true, if: :saida?
   validate :transacao_permitida?
 
   before_save :movimentar
@@ -11,7 +12,7 @@ class Aporte < ApplicationRecord
   def transacao_permitida?
     errors.add(:conta_destino_id, 'Filial apenas recebe transferencia') if conta_destino_filial?
     errors.add(:base, 'Não são permitidas operações entre contas canceladas ou bloqueadas') unless transacao_entre_contas_validas?
-    errors.add(:token, 'não é o mesmo da operação original') if token_diferente?
+    errors.add(:token_estornado, 'não é o mesmo da operação original') if token_diferente?
   end
 
   def conta_destino_filial?
@@ -24,6 +25,14 @@ class Aporte < ApplicationRecord
 
   def conta_destino_ativa?
     conta_destino.try(:ativa?)
+  end
+
+  def entrada?
+    tipo.try(:eql?, true)
+  end
+
+  def saida?
+    tipo.try(:eql?, false)
   end
 
   def movimentar
@@ -45,9 +54,9 @@ class Aporte < ApplicationRecord
   def token_diferente?
     return false if entrada?
     result = false
-    if token
-      original = Transferencia.where(token: token).first
-      result = token != original.token
+    if token_estornado
+      original = Aporte.where(token: token_estornado).first
+      result = token_estornado != original.try(:token)
     end
     result
   end
