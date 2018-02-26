@@ -19,3 +19,4 @@
 * Descricao
 - Criei uma pasta para v1 da api, pois quando for preciso fazer uma v2 fique facil de alterar e manter a v1 enquanto a v2 é implementada e homologada
 - Entendi que contas matriz podem fazer transferencias para qualquer conta filial e que contas filiais podem fazer transferencias entre si
+- Fiz os metodos em portugues por preferencia pessoal, mas nao tenho qualquer problema para programar com metodos em ingles
