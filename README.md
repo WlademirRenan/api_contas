@@ -14,6 +14,8 @@
 - Implementar limpeza de cache do item quando atualizado
 - Listar acessos da api
 - Mais testes com spec para outros cenarios
+- Implementar factorybot e faker para os testes
+- Melhorar performance dos testes
 - Refatorar codigo
 
 * Descricao
