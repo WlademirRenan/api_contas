@@ -8,7 +8,7 @@
 - rails 5.1.4
 
 * Melhorias
-- Criar sistema de login para autenticao
+- Criar sistema de login para autenticacao
 - Criar index no db para melhorar performance
 - Implementar cache para todas as consultas
 - Implementar limpeza de cache do item quando atualizado
