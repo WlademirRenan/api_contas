@@ -1,11 +1,11 @@
 * Ruby version
-* ruby 2.4.2p198 
+- ruby 2.4.2p198 
 
 * DataBase version
-* mysql  Ver 14.14
+- mysql  Ver 14.14
 
 * Rails version
-* rails 5.1.4
+- rails 5.1.4
 
 * Melhorias
 - Criar sistema de login para autenticao
