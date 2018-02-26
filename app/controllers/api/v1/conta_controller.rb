@@ -1,5 +1,5 @@
 class Api::V1::ContaController < Api::V1::ApiController
-  before_action :set_conta, only: [:show, :update, :destroy, :cancelar, :bloquear, :ativar]
+  before_action :set_conta, only: [:show, :update, :destroy, :cancelar, :bloquear, :ativar, :historico_entradas, :historico_saidas]
 
   # GET /api/v1/conta
   def index
@@ -63,6 +63,23 @@ class Api::V1::ContaController < Api::V1::ApiController
     # @conta.destroy
   end
 
+  def historico_entradas
+    historico = {}
+    historico['transferencia_entradas'] = @conta.transferencias_entradas
+    historico['transferencia_estorno_entradas'] = @conta.transferencias_estornadas_entradas
+    historico['aportes_entradas'] = @conta.aportes_entradas
+
+    render json: historico
+  end
+
+  def historico_saidas
+    historico = {}
+    historico['transferencia_saidas'] = @conta.transferencias_saidas
+    historico['transferencia_estorno_saidas'] = @conta.transferencias_estornadas_saidas
+    historico['aportes_saidas'] = @conta.aportes_estornados_saidas
+
+    render json: historico
+  end
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_conta

@@ -12,6 +12,8 @@ Rails.application.routes.draw do
         put '/:id/cancelar' => 'conta#cancelar', on: :collection
         put '/:id/bloquear' => 'conta#bloquear', on: :collection
         put '/:id/ativar' => 'conta#ativar', on: :collection
+        get '/:id/historico_entradas' => 'conta#historico_entradas', on: :collection
+        get '/:id/historico_saidas' => 'conta#historico_saidas', on: :collection
       end
     end
   end
