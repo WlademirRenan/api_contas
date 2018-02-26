@@ -1,6 +1,13 @@
 class Conta < ApplicationRecord
 
   has_many :filiais, class_name: 'Conta', foreign_key: 'conta_pai_id', dependent: :destroy
+  has_many :transferencias_entradas, -> { where tipo: true }, class_name: 'Transferencia', foreign_key: 'conta_destino_id'
+  has_many :transferencias_saidas, -> { where tipo: false }, class_name: 'Transferencia', foreign_key: 'conta_origem_id'
+  has_many :transferencias_estornadas_entradas, -> { where tipo: false }, class_name: 'Transferencia', foreign_key: 'conta_destino_id'
+  has_many :transferencias_estornadas_saidas, -> { where tipo: true }, class_name: 'Transferencia', foreign_key: 'conta_origem_id'
+  has_many :aportes_entradas, -> { where tipo: true }, class_name: 'Aporte', foreign_key: 'conta_destino_id'
+  has_many :aportes_estornados_saidas, -> { where tipo: false }, class_name: 'Aporte', foreign_key: 'conta_destino_id'
+
   before_validation :remover_espacos
   before_save :remover_conta_pai_matriz, if: :matriz?
   before_save :set_ativa
@@ -71,5 +78,6 @@ class Conta < ApplicationRecord
     self.saldo -= valor
     self.save
   end
+  
 
 end
